@@ -1,6 +1,7 @@
 import { Express } from 'express'
 import request from 'supertest'
 import { Collection } from 'mongodb'
+import { hash } from 'bcrypt'
 
 import { setupApp } from '@/main/config/app'
 import { MongoHelper } from '@/infra/db'
@@ -43,6 +44,34 @@ describe('Account Routes', () => {
           passwordConfirmation: 'any_password'
         })
         .expect(403)
+    })
+  })
+
+  describe('POST /accounts/login', () => {
+    it('should return 200 on login', async () => {
+      const password = await hash('any_password', 12)
+      await accountCollection.insertOne({
+        email: 'any_email@mail.com',
+        username: 'any_username',
+        password
+      })
+      await request(app)
+        .post('/api/accounts/login')
+        .send({
+          email: 'any_email@mail.com',
+          password: 'any_password'
+        })
+        .expect(200)
+    })
+
+    it('should return 401 on login', async () => {
+      await request(app)
+        .post('/api/accounts/login')
+        .send({
+          email: 'any_email@mail.com',
+          password: 'any_password'
+        })
+        .expect(401)
     })
   })
 })
