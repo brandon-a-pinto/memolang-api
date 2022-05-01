@@ -2,7 +2,7 @@ import faker from '@faker-js/faker'
 
 import { AddDeckController } from '@/presentation/controllers'
 import { ValidationSpy } from '@/tests/presentation/mocks'
-import { badRequest } from '@/presentation/helpers'
+import { badRequest, noContent } from '@/presentation/helpers'
 
 const mockRequest = (): AddDeckController.Request => ({
   title: faker.random.words(),
@@ -33,5 +33,11 @@ describe('AddDeck Controller', () => {
     const req = mockRequest()
     await sut.perform(req)
     expect(validationSpy.input).toEqual(req)
+  })
+
+  it('should return 204 on success', async () => {
+    const { sut } = makeSut()
+    const res = await sut.perform(mockRequest())
+    expect(res).toEqual(noContent())
   })
 })
