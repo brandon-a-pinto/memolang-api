@@ -2,7 +2,9 @@ import faker from '@faker-js/faker'
 
 import { AddDeckController } from '@/presentation/controllers'
 import { ValidationSpy, AddDeckMock } from '@/tests/presentation/mocks'
-import { badRequest, noContent } from '@/presentation/helpers'
+import { ServerError } from '@/presentation/errors'
+import { badRequest, noContent, serverError } from '@/presentation/helpers'
+import { throwError } from '@/tests/domain/mocks'
 
 const mockRequest = (): AddDeckController.Request => ({
   accountId: faker.datatype.uuid(),
@@ -49,5 +51,12 @@ describe('AddDeck Controller', () => {
     const req = mockRequest()
     await sut.perform(req)
     expect(addDeckMock.params).toEqual(req)
+  })
+
+  it('should throw if AddDeck throws', async () => {
+    const { sut, addDeckMock } = makeSut()
+    jest.spyOn(addDeckMock, 'add').mockImplementationOnce(throwError)
+    const res = await sut.perform(mockRequest())
+    expect(res).toEqual(serverError(new ServerError(null)))
   })
 })
