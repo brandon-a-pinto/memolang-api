@@ -1,10 +1,11 @@
 import faker from '@faker-js/faker'
 
 import { AddDeckController } from '@/presentation/controllers'
-import { ValidationSpy } from '@/tests/presentation/mocks'
+import { ValidationSpy, AddDeckMock } from '@/tests/presentation/mocks'
 import { badRequest, noContent } from '@/presentation/helpers'
 
 const mockRequest = (): AddDeckController.Request => ({
+  accountId: faker.datatype.uuid(),
   title: faker.random.words(),
   language: faker.random.word()
 })
@@ -12,12 +13,14 @@ const mockRequest = (): AddDeckController.Request => ({
 type SutTypes = {
   sut: AddDeckController
   validationSpy: ValidationSpy
+  addDeckMock: AddDeckMock
 }
 
 const makeSut = (): SutTypes => {
   const validationSpy = new ValidationSpy()
-  const sut = new AddDeckController(validationSpy)
-  return { sut, validationSpy }
+  const addDeckMock = new AddDeckMock()
+  const sut = new AddDeckController(validationSpy, addDeckMock)
+  return { sut, validationSpy, addDeckMock }
 }
 
 describe('AddDeck Controller', () => {
@@ -39,5 +42,12 @@ describe('AddDeck Controller', () => {
     const { sut } = makeSut()
     const res = await sut.perform(mockRequest())
     expect(res).toEqual(noContent())
+  })
+
+  it('should call AddDeck with correct values', async () => {
+    const { sut, addDeckMock } = makeSut()
+    const req = mockRequest()
+    await sut.perform(req)
+    expect(addDeckMock.params).toEqual(req)
   })
 })
