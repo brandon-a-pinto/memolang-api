@@ -1,6 +1,6 @@
 import { DbAddDeck } from '@/data/usecases'
 import { AddDeckRepositoryMock } from '@/tests/data/mocks'
-import { mockAddDeckParams } from '@/tests/domain/mocks'
+import { mockAddDeckParams, throwError } from '@/tests/domain/mocks'
 
 type SutTypes = {
   sut: DbAddDeck
@@ -14,10 +14,17 @@ const makeSut = (): SutTypes => {
 }
 
 describe('DbAddDeck Usecase', () => {
-  it('Should call AddDeckRepository with correct values', async () => {
+  it('should call AddDeckRepository with correct values', async () => {
     const { sut, addDeckRepositoryMock } = makeSut()
     const data = mockAddDeckParams()
     await sut.add(data)
     expect(addDeckRepositoryMock.params).toEqual(data)
+  })
+
+  it('should throw if AddDeckRepository throws', async () => {
+    const { sut, addDeckRepositoryMock } = makeSut()
+    jest.spyOn(addDeckRepositoryMock, 'add').mockImplementationOnce(throwError)
+    const promise = sut.add(mockAddDeckParams())
+    await expect(promise).rejects.toThrow()
   })
 })
