@@ -42,4 +42,11 @@ describe('AddFlashcard Controller', () => {
     const res = await sut.perform(mockRequest())
     expect(res).toEqual(badRequest(validationSpy.error))
   })
+
+  it('should call Validation with correct values', async () => {
+    const { sut, validationSpy } = makeSut()
+    const req = mockRequest()
+    await sut.perform(req)
+    expect(validationSpy.input).toEqual(req)
+  })
 })
