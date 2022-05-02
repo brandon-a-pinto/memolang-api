@@ -58,5 +58,15 @@ describe('Deck Routes', () => {
         .set('x-access-token', accessToken)
         .expect(204)
     })
+
+    it('should return 403 on add deck without accessToken', async () => {
+      await request(app)
+        .post('/api/decks')
+        .send({
+          title: 'any_title',
+          language: 'any_language'
+        })
+        .expect(403)
+    })
   })
 })
