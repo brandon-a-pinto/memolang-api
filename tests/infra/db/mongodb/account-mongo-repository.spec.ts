@@ -85,7 +85,7 @@ describe('AccountMongoRepository', () => {
     })
   })
 
-  describe('loadByToken', () => {
+  describe('loadByToken()', () => {
     let accessToken = faker.datatype.uuid()
 
     beforeEach(() => {

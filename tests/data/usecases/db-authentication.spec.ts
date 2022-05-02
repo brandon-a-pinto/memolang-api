@@ -55,8 +55,8 @@ describe('DbAuthentication Usecase', () => {
     jest
       .spyOn(loadAccountByEmailRepositorySpy, 'loadByEmail')
       .mockImplementationOnce(throwError)
-    const res = sut.auth(mockAuthenticationParams())
-    await expect(res).rejects.toThrow()
+    const promise = sut.auth(mockAuthenticationParams())
+    await expect(promise).rejects.toThrow()
   })
 
   it('should call HasherComparer with correct values', async () => {
@@ -80,8 +80,8 @@ describe('DbAuthentication Usecase', () => {
   it('should throw if HasherComparer throws', async () => {
     const { sut, hasherComparerSpy } = makeSut()
     jest.spyOn(hasherComparerSpy, 'compare').mockImplementationOnce(throwError)
-    const res = sut.auth(mockAuthenticationParams())
-    await expect(res).rejects.toThrow()
+    const promise = sut.auth(mockAuthenticationParams())
+    await expect(promise).rejects.toThrow()
   })
 
   it('should call Encrypter with correct plaintext', async () => {
@@ -95,8 +95,8 @@ describe('DbAuthentication Usecase', () => {
   it('should throw if Encrypter throws', async () => {
     const { sut, encrypterSpy } = makeSut()
     jest.spyOn(encrypterSpy, 'encrypt').mockImplementationOnce(throwError)
-    const res = sut.auth(mockAuthenticationParams())
-    await expect(res).rejects.toThrow()
+    const promise = sut.auth(mockAuthenticationParams())
+    await expect(promise).rejects.toThrow()
   })
 
   it('should return access token on success', async () => {
@@ -124,7 +124,7 @@ describe('DbAuthentication Usecase', () => {
     jest
       .spyOn(updateTokenRepositoryMock, 'updateToken')
       .mockImplementationOnce(throwError)
-    const res = sut.auth(mockAuthenticationParams())
-    await expect(res).rejects.toThrow()
+    const promise = sut.auth(mockAuthenticationParams())
+    await expect(promise).rejects.toThrow()
   })
 })
