@@ -2,7 +2,9 @@ import faker from '@faker-js/faker'
 
 import { AddFlashcardController } from '@/presentation/controllers'
 import { ValidationSpy, AddFlashcardSpy } from '@/tests/presentation/mocks'
-import { badRequest, noContent } from '@/presentation/helpers'
+import { ServerError } from '@/presentation/errors'
+import { badRequest, noContent, serverError } from '@/presentation/helpers'
+import { throwError } from '@/tests/domain/mocks'
 
 const mockRequest = (): AddFlashcardController.Request => ({
   deckId: faker.datatype.uuid(),
@@ -65,5 +67,12 @@ describe('AddFlashcard Controller', () => {
       deckId: req.deckId,
       flashcard: req.flashcard
     })
+  })
+
+  it('should throw if AddFlashcard throws', async () => {
+    const { sut, addFlashcardSpy } = makeSut()
+    jest.spyOn(addFlashcardSpy, 'add').mockImplementationOnce(throwError)
+    const res = await sut.perform(mockRequest())
+    expect(res).toEqual(serverError(new ServerError(null)))
   })
 })
