@@ -2,8 +2,13 @@ import faker from '@faker-js/faker'
 
 import { AddFlashcardController } from '@/presentation/controllers'
 import { ValidationSpy, AddFlashcardSpy } from '@/tests/presentation/mocks'
-import { ServerError } from '@/presentation/errors'
-import { badRequest, noContent, serverError } from '@/presentation/helpers'
+import { ServerError, InvalidUserError } from '@/presentation/errors'
+import {
+  badRequest,
+  noContent,
+  serverError,
+  forbidden
+} from '@/presentation/helpers'
 import { throwError } from '@/tests/domain/mocks'
 
 const mockRequest = (): AddFlashcardController.Request => ({
@@ -74,5 +79,12 @@ describe('AddFlashcard Controller', () => {
     jest.spyOn(addFlashcardSpy, 'add').mockImplementationOnce(throwError)
     const res = await sut.perform(mockRequest())
     expect(res).toEqual(serverError(new ServerError(null)))
+  })
+
+  it('should return 403 if AddFlashcard returns false', async () => {
+    const { sut, addFlashcardSpy } = makeSut()
+    addFlashcardSpy.result = false
+    const res = await sut.perform(mockRequest())
+    expect(res).toEqual(forbidden(new InvalidUserError()))
   })
 })
