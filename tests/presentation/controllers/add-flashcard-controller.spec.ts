@@ -55,4 +55,15 @@ describe('AddFlashcard Controller', () => {
     const res = await sut.perform(mockRequest())
     expect(res).toEqual(noContent())
   })
+
+  it('should call AddFlashcard with correct values', async () => {
+    const { sut, addFlashcardSpy } = makeSut()
+    const req = mockRequest()
+    await sut.perform(req)
+    expect(addFlashcardSpy.params).toEqual({
+      ownerId: req.accountId,
+      deckId: req.deckId,
+      flashcard: req.flashcard
+    })
+  })
 })
