@@ -1,6 +1,12 @@
 import { Controller, HttpResponse, Validation } from '@/presentation/contracts'
 import { AddFlashcard } from '@/domain/usecases'
-import { noContent, badRequest, serverError } from '@/presentation/helpers'
+import { InvalidUserError } from '@/presentation/errors'
+import {
+  noContent,
+  badRequest,
+  serverError,
+  forbidden
+} from '@/presentation/helpers'
 
 export class AddFlashcardController implements Controller {
   constructor(
@@ -17,11 +23,14 @@ export class AddFlashcardController implements Controller {
         return badRequest(error)
       }
       const { accountId, deckId, flashcard } = request
-      await this.addFlashcard.add({
+      const card = await this.addFlashcard.add({
         flashcard,
         deckId,
         ownerId: accountId
       })
+      if (!card) {
+        return forbidden(new InvalidUserError())
+      }
       return noContent()
     } catch (err) {
       return serverError(err)
