@@ -14,7 +14,8 @@ export class AddDeckController implements Controller {
       if (error) {
         return badRequest(error)
       }
-      await this.addDeck.add(request)
+      const { title, language, accountId } = request
+      await this.addDeck.add({ title, language, ownerId: accountId })
       return noContent()
     } catch (err) {
       return serverError(err)

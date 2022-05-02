@@ -50,7 +50,11 @@ describe('AddDeck Controller', () => {
     const { sut, addDeckMock } = makeSut()
     const req = mockRequest()
     await sut.perform(req)
-    expect(addDeckMock.params).toEqual(req)
+    expect(addDeckMock.params).toEqual({
+      ownerId: req.accountId,
+      title: req.title,
+      language: req.language
+    })
   })
 
   it('should throw if AddDeck throws', async () => {

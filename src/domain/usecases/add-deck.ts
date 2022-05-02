@@ -4,6 +4,7 @@ export interface AddDeck {
 
 export namespace AddDeck {
   export type Params = {
+    ownerId: string
     title: string
     language: string
   }
