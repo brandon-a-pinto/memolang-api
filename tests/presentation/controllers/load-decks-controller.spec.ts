@@ -2,6 +2,7 @@ import faker from '@faker-js/faker'
 
 import { LoadDecksController } from '@/presentation/controllers'
 import { LoadDecksSpy } from '@/tests/presentation/mocks'
+import { ok } from '@/presentation/helpers'
 
 const mockRequest = (): LoadDecksController.Request => ({
   accountId: faker.datatype.uuid()
@@ -24,5 +25,11 @@ describe('LoadDecks Controller', () => {
     const req = mockRequest()
     await sut.perform(req)
     expect(loadDecksSpy.ownerId).toEqual(req.accountId)
+  })
+
+  it('should return 200 if LoadDecks returns an array of decks', async () => {
+    const { sut, loadDecksSpy } = makeSut()
+    const res = await sut.perform(mockRequest())
+    expect(res).toEqual(ok(loadDecksSpy.result))
   })
 })
