@@ -1,14 +1,24 @@
 import { AddFlashcard } from '@/domain/usecases'
-import { CheckDeckByOwnerIdRepository } from '@/data/contracts'
+import {
+  CheckDeckByOwnerIdRepository,
+  AddFlashcardRepository
+} from '@/data/contracts'
 
 export class DbAddFlashcard implements AddFlashcard {
   constructor(
-    private readonly checkDeckByOwnerIdRepository: CheckDeckByOwnerIdRepository
+    private readonly checkDeckByOwnerIdRepository: CheckDeckByOwnerIdRepository,
+    private readonly addFlashcardRepository: AddFlashcardRepository
   ) {}
 
   async add(params: AddFlashcard.Params): Promise<AddFlashcard.Result> {
-    const { deckId, ownerId } = params
-    await this.checkDeckByOwnerIdRepository.checkByOwnerId(ownerId, deckId)
-    return false
+    let isValid = false
+    const check = await this.checkDeckByOwnerIdRepository.checkByOwnerId(
+      params.ownerId,
+      params.deckId
+    )
+    if (check) {
+      isValid = await this.addFlashcardRepository.addFlashcard(params)
+    }
+    return isValid
   }
 }

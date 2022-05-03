@@ -1,16 +1,24 @@
 import { DbAddFlashcard } from '@/data/usecases'
-import { CheckDeckByOwnerIdRepositorySpy } from '@/tests/data/mocks'
+import {
+  CheckDeckByOwnerIdRepositorySpy,
+  AddFlashcardRepositorySpy
+} from '@/tests/data/mocks'
 import { mockAddFlashcardParams, throwError } from '@/tests/domain/mocks'
 
 type SutTypes = {
   sut: DbAddFlashcard
   checkDeckByOwnerIdRepositorySpy: CheckDeckByOwnerIdRepositorySpy
+  addFlashcardRepositorySpy: AddFlashcardRepositorySpy
 }
 
 const makeSut = (): SutTypes => {
   const checkDeckByOwnerIdRepositorySpy = new CheckDeckByOwnerIdRepositorySpy()
-  const sut = new DbAddFlashcard(checkDeckByOwnerIdRepositorySpy)
-  return { sut, checkDeckByOwnerIdRepositorySpy }
+  const addFlashcardRepositorySpy = new AddFlashcardRepositorySpy()
+  const sut = new DbAddFlashcard(
+    checkDeckByOwnerIdRepositorySpy,
+    addFlashcardRepositorySpy
+  )
+  return { sut, checkDeckByOwnerIdRepositorySpy, addFlashcardRepositorySpy }
 }
 
 describe('DbAddFlashcard Usecase', () => {
@@ -29,5 +37,12 @@ describe('DbAddFlashcard Usecase', () => {
       .mockImplementationOnce(throwError)
     const promise = sut.add(mockAddFlashcardParams())
     await expect(promise).rejects.toThrow()
+  })
+
+  it('should return false if CheckDeckByOwnerIdRepository returns false', async () => {
+    const { sut, checkDeckByOwnerIdRepositorySpy } = makeSut()
+    checkDeckByOwnerIdRepositorySpy.result = false
+    const res = await sut.add(mockAddFlashcardParams())
+    expect(res).toBe(false)
   })
 })

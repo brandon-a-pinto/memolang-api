@@ -1,6 +1,7 @@
 import {
   AddDeckRepository,
-  CheckDeckByOwnerIdRepository
+  CheckDeckByOwnerIdRepository,
+  AddFlashcardRepository
 } from '@/data/contracts'
 
 export class AddDeckRepositoryMock implements AddDeckRepository {
@@ -21,6 +22,16 @@ export class CheckDeckByOwnerIdRepositorySpy
   async checkByOwnerId(ownerId: string, deckId: string): Promise<boolean> {
     this.ownerId = ownerId
     this.deckId = deckId
+    return this.result
+  }
+}
+
+export class AddFlashcardRepositorySpy implements AddFlashcardRepository {
+  params: AddFlashcardRepository.Params
+  result: boolean = true
+
+  async addFlashcard(params: AddFlashcardRepository.Params): Promise<boolean> {
+    this.params = params
     return this.result
   }
 }
