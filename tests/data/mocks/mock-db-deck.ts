@@ -1,7 +1,10 @@
+import faker from '@faker-js/faker'
+
 import {
   AddDeckRepository,
   CheckDeckByOwnerIdRepository,
-  AddFlashcardRepository
+  AddFlashcardRepository,
+  LoadDecksRepository
 } from '@/data/contracts'
 
 export class AddDeckRepositoryMock implements AddDeckRepository {
@@ -32,6 +35,23 @@ export class AddFlashcardRepositorySpy implements AddFlashcardRepository {
 
   async addFlashcard(params: AddFlashcardRepository.Params): Promise<boolean> {
     this.params = params
+    return this.result
+  }
+}
+
+export class LoadDecksRepositorySpy implements LoadDecksRepository {
+  ownerId: string
+  result = [
+    {
+      id: faker.datatype.uuid(),
+      title: faker.random.words(),
+      language: faker.random.words(),
+      ownerId: faker.datatype.uuid()
+    }
+  ]
+
+  async load(ownerId: string): Promise<LoadDecksRepository.Result> {
+    this.ownerId = ownerId
     return this.result
   }
 }
