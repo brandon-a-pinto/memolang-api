@@ -96,5 +96,30 @@ describe('Deck Routes', () => {
         .set('x-access-token', accessToken)
         .expect(204)
     })
+
+    it('should return 403 on add flashcard without accessToken', async () => {
+      const { id } = await mockAccount()
+      const deck = await deckCollection.insertOne({
+        title: 'any_title',
+        language: 'any_language',
+        ownerId: id
+      })
+      await request(app)
+        .put(`/api/decks/${deck.insertedId.toHexString()}/add-card`)
+        .send({
+          front: {
+            content: 'any_content',
+            howToRead: 'any_howToRead'
+          },
+          back: {
+            content: 'any_content',
+            glossary: {
+              words: ['any_word'],
+              meanings: ['any_meaning']
+            }
+          }
+        })
+        .expect(403)
+    })
   })
 })
