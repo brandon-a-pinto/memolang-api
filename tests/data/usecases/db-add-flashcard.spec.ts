@@ -45,4 +45,11 @@ describe('DbAddFlashcard Usecase', () => {
     const res = await sut.add(mockAddFlashcardParams())
     expect(res).toBe(false)
   })
+
+  it('should call AddFlashcardRepository with correct values', async () => {
+    const { sut, addFlashcardRepositorySpy } = makeSut()
+    const data = mockAddFlashcardParams()
+    await sut.add(data)
+    expect(addFlashcardRepositorySpy.params).toEqual(data)
+  })
 })
