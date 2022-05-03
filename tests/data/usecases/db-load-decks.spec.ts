@@ -15,10 +15,16 @@ const makeSut = (): SutTypes => {
 }
 
 describe('DbLoadDecks Usecase', () => {
-  it('Should call LoadDecksRepository with correct values', async () => {
+  it('should call LoadDecksRepository with correct values', async () => {
     const { sut, loadDecksRepositorySpy } = makeSut()
     const ownerId = faker.datatype.uuid()
     await sut.load(ownerId)
     expect(loadDecksRepositorySpy.ownerId).toBe(ownerId)
+  })
+
+  it('should return an array of decks on success', async () => {
+    const { sut, loadDecksRepositorySpy } = makeSut()
+    const res = await sut.load(faker.datatype.uuid())
+    expect(res).toEqual(loadDecksRepositorySpy.result)
   })
 })
