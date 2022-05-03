@@ -2,6 +2,7 @@ import faker from '@faker-js/faker'
 
 import { DbLoadDecks } from '@/data/usecases'
 import { LoadDecksRepositorySpy } from '@/tests/data/mocks'
+import { throwError } from '@/tests/domain/mocks'
 
 type SutTypes = {
   sut: DbLoadDecks
@@ -26,5 +27,14 @@ describe('DbLoadDecks Usecase', () => {
     const { sut, loadDecksRepositorySpy } = makeSut()
     const res = await sut.load(faker.datatype.uuid())
     expect(res).toEqual(loadDecksRepositorySpy.result)
+  })
+
+  it('should throw if LoadDecksRepository throws', async () => {
+    const { sut, loadDecksRepositorySpy } = makeSut()
+    jest
+      .spyOn(loadDecksRepositorySpy, 'load')
+      .mockImplementationOnce(throwError)
+    const promise = sut.load(faker.datatype.uuid())
+    await expect(promise).rejects.toThrow()
   })
 })
