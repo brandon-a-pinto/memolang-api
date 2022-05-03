@@ -66,4 +66,16 @@ describe('DeckMongoRepository', () => {
       expect(res.flashcards).toEqual([flashcard])
     })
   })
+
+  describe('checkByOwnerId()', () => {
+    it('should return true if user is the owner', async () => {
+      const sut = makeSut()
+      const { deck, id } = await mockData()
+      const res = await sut.checkByOwnerId(
+        id.toHexString(),
+        deck._id.toHexString()
+      )
+      expect(res).toBe(true)
+    })
+  })
 })
