@@ -1,6 +1,6 @@
 import { DbAddFlashcard } from '@/data/usecases'
 import { CheckDeckByOwnerIdRepositorySpy } from '@/tests/data/mocks'
-import { mockAddFlashcardParams } from '@/tests/domain/mocks'
+import { mockAddFlashcardParams, throwError } from '@/tests/domain/mocks'
 
 type SutTypes = {
   sut: DbAddFlashcard
@@ -20,5 +20,14 @@ describe('DbAddFlashcard Usecase', () => {
     await sut.add(data)
     expect(checkDeckByOwnerIdRepositorySpy.deckId).toBe(data.deckId)
     expect(checkDeckByOwnerIdRepositorySpy.ownerId).toBe(data.ownerId)
+  })
+
+  it('should throw if CheckDeckByOwnerIdRepository throws', async () => {
+    const { sut, checkDeckByOwnerIdRepositorySpy } = makeSut()
+    jest
+      .spyOn(checkDeckByOwnerIdRepositorySpy, 'checkByOwnerId')
+      .mockImplementationOnce(throwError)
+    const promise = sut.add(mockAddFlashcardParams())
+    await expect(promise).rejects.toThrow()
   })
 })
