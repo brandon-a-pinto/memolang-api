@@ -1,4 +1,5 @@
 import { Collection } from 'mongodb'
+import FakeObjectId from 'bson-objectid'
 
 import { MongoHelper, DeckMongoRepository } from '@/infra/db'
 import {
@@ -76,6 +77,16 @@ describe('DeckMongoRepository', () => {
         deck._id.toHexString()
       )
       expect(res).toBe(true)
+    })
+
+    it('should return false if user is not the owner', async () => {
+      const sut = makeSut()
+      const { deck } = await mockData()
+      const res = await sut.checkByOwnerId(
+        new FakeObjectId().toHexString(),
+        deck._id.toHexString()
+      )
+      expect(res).toBe(false)
     })
   })
 })
