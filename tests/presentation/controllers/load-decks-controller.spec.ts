@@ -2,7 +2,9 @@ import faker from '@faker-js/faker'
 
 import { LoadDecksController } from '@/presentation/controllers'
 import { LoadDecksSpy } from '@/tests/presentation/mocks'
-import { ok, noContent } from '@/presentation/helpers'
+import { ServerError } from '@/presentation/errors'
+import { ok, noContent, serverError } from '@/presentation/helpers'
+import { throwError } from '@/tests/domain/mocks'
 
 const mockRequest = (): LoadDecksController.Request => ({
   accountId: faker.datatype.uuid()
@@ -38,5 +40,12 @@ describe('LoadDecks Controller', () => {
     loadDecksSpy.result = []
     const res = await sut.perform(mockRequest())
     expect(res).toEqual(noContent())
+  })
+
+  it('should return 500 if LoadDecks throws', async () => {
+    const { sut, loadDecksSpy } = makeSut()
+    jest.spyOn(loadDecksSpy, 'load').mockImplementationOnce(throwError)
+    const res = await sut.perform(mockRequest())
+    expect(res).toEqual(serverError(new ServerError(null)))
   })
 })
