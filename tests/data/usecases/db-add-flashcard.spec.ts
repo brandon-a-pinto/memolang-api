@@ -52,4 +52,13 @@ describe('DbAddFlashcard Usecase', () => {
     await sut.add(data)
     expect(addFlashcardRepositorySpy.params).toEqual(data)
   })
+
+  it('should throw if AddFlashcardRepository throws', async () => {
+    const { sut, addFlashcardRepositorySpy } = makeSut()
+    jest
+      .spyOn(addFlashcardRepositorySpy, 'addFlashcard')
+      .mockImplementationOnce(throwError)
+    const promise = sut.add(mockAddFlashcardParams())
+    await expect(promise).rejects.toThrow()
+  })
 })
