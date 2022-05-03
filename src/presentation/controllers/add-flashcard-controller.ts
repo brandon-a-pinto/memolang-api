@@ -22,9 +22,10 @@ export class AddFlashcardController implements Controller {
       if (error) {
         return badRequest(error)
       }
-      const { accountId, deckId, flashcard } = request
+      const { accountId, deckId, front, back } = request
       const card = await this.addFlashcard.add({
-        flashcard,
+        front,
+        back,
         deckId,
         ownerId: accountId
       })
@@ -42,10 +43,8 @@ export namespace AddFlashcardController {
   export type Request = {
     accountId: string
     deckId: string
-    flashcard: {
-      front: Front
-      back: Back
-    }
+    front: Front
+    back: Back
   }
   type Front = {
     content: string

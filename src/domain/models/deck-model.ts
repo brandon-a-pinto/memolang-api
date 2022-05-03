@@ -3,19 +3,23 @@ export type DeckModel = {
   title: string
   language: string
   ownerId: string
-  flashcards?: Flashcard[]
+  flashcards?: [
+    {
+      front: Front
+      back: Back
+    }
+  ]
 }
 
-export type Flashcard = {
-  front: {
-    content: string
-    howToRead?: string
-  }
-  back: {
-    content: string
-    glossary?: {
-      words: string[]
-      meanings: string[]
-    }
+export type Front = {
+  content: string
+  howToRead?: string
+}
+
+export type Back = {
+  content: string
+  glossary?: {
+    words: string[]
+    meanings: string[]
   }
 }

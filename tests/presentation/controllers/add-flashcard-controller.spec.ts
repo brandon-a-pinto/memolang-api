@@ -14,17 +14,15 @@ import { throwError } from '@/tests/domain/mocks'
 const mockRequest = (): AddFlashcardController.Request => ({
   deckId: faker.datatype.uuid(),
   accountId: faker.datatype.uuid(),
-  flashcard: {
-    front: {
-      content: faker.random.words(),
-      howToRead: faker.random.words()
-    },
-    back: {
-      content: faker.random.words(),
-      glossary: {
-        words: [faker.random.word()],
-        meanings: [faker.random.word()]
-      }
+  front: {
+    content: faker.random.words(),
+    howToRead: faker.random.words()
+  },
+  back: {
+    content: faker.random.words(),
+    glossary: {
+      words: [faker.random.word()],
+      meanings: [faker.random.word()]
     }
   }
 })
@@ -70,7 +68,8 @@ describe('AddFlashcard Controller', () => {
     expect(addFlashcardSpy.params).toEqual({
       ownerId: req.accountId,
       deckId: req.deckId,
-      flashcard: req.flashcard
+      front: req.front,
+      back: req.back
     })
   })
 

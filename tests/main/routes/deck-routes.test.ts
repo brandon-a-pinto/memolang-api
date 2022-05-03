@@ -81,17 +81,15 @@ describe('Deck Routes', () => {
       await request(app)
         .put(`/api/decks/${deck.insertedId.toHexString()}/add-card`)
         .send({
-          flashcard: {
-            front: {
-              content: 'any_content',
-              howToRead: 'any_howToRead'
-            },
-            back: {
-              content: 'any_content',
-              glossary: {
-                words: ['any_word'],
-                meanings: ['any_meaning']
-              }
+          front: {
+            content: 'any_content',
+            howToRead: 'any_howToRead'
+          },
+          back: {
+            content: 'any_content',
+            glossary: {
+              words: ['any_word'],
+              meanings: ['any_meaning']
             }
           }
         })

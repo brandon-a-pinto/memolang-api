@@ -22,11 +22,11 @@ export class DeckMongoRepository
   async addFlashcard(
     params: AddFlashcardRepository.Params
   ): Promise<AddFlashcardRepository.Result> {
-    const { deckId, flashcard } = params
+    const { deckId, front, back } = params
     const deckCollection = MongoHelper.getCollection('decks')
     const result = await deckCollection.updateOne(
       { _id: new ObjectId(deckId) },
-      { $addToSet: { flashcards: flashcard } }
+      { $addToSet: { flashcards: { front, back } } }
     )
     return result.acknowledged !== null
   }

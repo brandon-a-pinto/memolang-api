@@ -56,15 +56,16 @@ describe('DeckMongoRepository', () => {
     it('should add a flashcard on success', async () => {
       const sut = makeSut()
       const { deck, id } = await mockData()
-      const { flashcard } = mockAddFlashcardParams()
+      const { front, back } = mockAddFlashcardParams()
       await sut.addFlashcard({
         ownerId: id.toHexString(),
         deckId: deck._id.toHexString(),
-        flashcard
+        front,
+        back
       })
       const res = await deckCollection.findOne({ _id: deck._id })
       expect(res).toBeTruthy()
-      expect(res.flashcards).toEqual([flashcard])
+      expect(res.flashcards).toEqual([{ front, back }])
     })
   })
 

@@ -6,7 +6,7 @@ import {
 
 export const makeAddFlashcardValidation = (): ValidationComposite => {
   const validations: Validation[] = []
-  for (const field of ['flashcard']) {
+  for (const field of ['front', 'back']) {
     validations.push(new RequiredFieldValidation(field))
   }
   return new ValidationComposite(validations)

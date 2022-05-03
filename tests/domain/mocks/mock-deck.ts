@@ -11,17 +11,15 @@ export const mockAddDeckParams = (): AddDeck.Params => ({
 export const mockAddFlashcardParams = (): AddFlashcard.Params => ({
   ownerId: faker.datatype.uuid(),
   deckId: faker.datatype.uuid(),
-  flashcard: {
-    front: {
-      content: faker.random.words(),
-      howToRead: faker.random.words()
-    },
-    back: {
-      content: faker.random.words(),
-      glossary: {
-        words: [faker.random.word()],
-        meanings: [faker.random.word()]
-      }
+  front: {
+    content: faker.random.words(),
+    howToRead: faker.random.words()
+  },
+  back: {
+    content: faker.random.words(),
+    glossary: {
+      words: [faker.random.word()],
+      meanings: [faker.random.word()]
     }
   }
 })
