@@ -2,7 +2,7 @@ import faker from '@faker-js/faker'
 
 import { LoadDecksController } from '@/presentation/controllers'
 import { LoadDecksSpy } from '@/tests/presentation/mocks'
-import { ok } from '@/presentation/helpers'
+import { ok, noContent } from '@/presentation/helpers'
 
 const mockRequest = (): LoadDecksController.Request => ({
   accountId: faker.datatype.uuid()
@@ -31,5 +31,12 @@ describe('LoadDecks Controller', () => {
     const { sut, loadDecksSpy } = makeSut()
     const res = await sut.perform(mockRequest())
     expect(res).toEqual(ok(loadDecksSpy.result))
+  })
+
+  it('should return 204 if LoadDecks returns empty', async () => {
+    const { sut, loadDecksSpy } = makeSut()
+    loadDecksSpy.result = []
+    const res = await sut.perform(mockRequest())
+    expect(res).toEqual(noContent())
   })
 })
