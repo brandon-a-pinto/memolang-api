@@ -144,5 +144,10 @@ describe('Deck Routes', () => {
         .set('x-access-token', accessToken)
         .expect(204)
     })
+
+    it('should return 403 on load decks without accessToken', async () => {
+      const { id } = await mockAccount()
+      await request(app).get(`/api/decks/${id.toHexString()}`).expect(403)
+    })
   })
 })
