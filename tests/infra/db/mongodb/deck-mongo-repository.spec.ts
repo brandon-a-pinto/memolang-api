@@ -90,4 +90,15 @@ describe('DeckMongoRepository', () => {
       expect(res).toBe(false)
     })
   })
+
+  describe('load()', () => {
+    it('should load an array of decks', async () => {
+      const sut = makeSut()
+      const { deck } = await mockData()
+      const decks = await sut.load(deck.ownerId)
+      expect(decks.length).toBe(1)
+      expect(decks[0].id).toEqual(deck._id)
+      expect(decks[0].ownerId).toEqual(deck.ownerId)
+    })
+  })
 })
