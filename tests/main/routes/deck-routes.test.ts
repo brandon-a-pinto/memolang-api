@@ -122,4 +122,19 @@ describe('Deck Routes', () => {
         .expect(403)
     })
   })
+
+  describe('GET /decks/:ownerId', () => {
+    it('should return 200 on load decks', async () => {
+      const { accessToken, id } = await mockAccount()
+      await deckCollection.insertOne({
+        title: 'any_title',
+        language: 'any_language',
+        ownerId: id
+      })
+      await request(app)
+        .get(`/api/decks/${id.toHexString()}`)
+        .set('x-access-token', accessToken)
+        .expect(200)
+    })
+  })
 })
