@@ -100,5 +100,12 @@ describe('DeckMongoRepository', () => {
       expect(decks[0].id).toEqual(deck._id)
       expect(decks[0].ownerId).toEqual(deck.ownerId)
     })
+
+    it('should load an empty array', async () => {
+      const sut = makeSut()
+      const account = await accountCollection.insertOne(mockAddAccountParams())
+      const res = await sut.load(account.insertedId.toHexString())
+      expect(res.length).toBe(0)
+    })
   })
 })
