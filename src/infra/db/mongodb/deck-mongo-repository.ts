@@ -1,16 +1,18 @@
 import {
   AddDeckRepository,
   AddFlashcardRepository,
-  CheckDeckByOwnerIdRepository
+  CheckDeckByOwnerIdRepository,
+  LoadDecksRepository
 } from '@/data/contracts'
-import { MongoHelper } from '@/infra/db'
+import { MongoHelper, QueryBuilder } from '@/infra/db'
 import { ObjectId } from 'mongodb'
 
 export class DeckMongoRepository
   implements
     AddDeckRepository,
     AddFlashcardRepository,
-    CheckDeckByOwnerIdRepository
+    CheckDeckByOwnerIdRepository,
+    LoadDecksRepository
 {
   async add(
     params: AddDeckRepository.Params
@@ -41,5 +43,15 @@ export class DeckMongoRepository
       { projection: { _id: 1, ownerId: 1 } }
     )
     return result !== null
+  }
+
+  async load(ownerId: string): Promise<LoadDecksRepository.Result> {
+    const deckCollection = MongoHelper.getCollection('decks')
+    const query = new QueryBuilder()
+      .match({ ownerId: new ObjectId(ownerId) })
+      .project({ _id: 1, title: 1, language: 1, ownerId: 1, flashcards: 1 })
+      .build()
+    const result = await deckCollection.aggregate(query).toArray()
+    return MongoHelper.mapCollection(result)
   }
 }
