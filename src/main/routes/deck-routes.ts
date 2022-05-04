@@ -3,7 +3,8 @@ import { Router } from 'express'
 import { adaptRoute } from '@/main/adapters'
 import {
   makeAddDeckController,
-  makeAddFlashcardController
+  makeAddFlashcardController,
+  makeLoadDecksController
 } from '@/main/factories'
 import { auth } from '@/main/middlewares'
 
@@ -14,4 +15,5 @@ export default (router: Router): void => {
     auth,
     adaptRoute(makeAddFlashcardController())
   )
+  router.get('/decks/:ownerId', auth, adaptRoute(makeLoadDecksController()))
 }
