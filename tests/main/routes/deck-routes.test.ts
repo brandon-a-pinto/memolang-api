@@ -136,5 +136,13 @@ describe('Deck Routes', () => {
         .set('x-access-token', accessToken)
         .expect(200)
     })
+
+    it('should return 204 on load decks', async () => {
+      const { accessToken, id } = await mockAccount()
+      await request(app)
+        .get(`/api/decks/${id.toHexString()}`)
+        .set('x-access-token', accessToken)
+        .expect(204)
+    })
   })
 })
