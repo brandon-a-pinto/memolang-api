@@ -42,5 +42,12 @@ describe('Account GraphQL', () => {
       expect(res.status).toBe(200)
       expect(res.body.data.login.accessToken).toBeTruthy()
     })
+
+    it('should return UnauthorizedError on invalid credentials', async () => {
+      const res = await request(app).post('/graphql').send({ query })
+      expect(res.status).toBe(401)
+      expect(res.body.data).toBeFalsy()
+      expect(res.body.errors[0].message).toBe('Unauthorized')
+    })
   })
 })
