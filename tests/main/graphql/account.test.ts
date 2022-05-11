@@ -61,5 +61,18 @@ describe('Account GraphQL', () => {
       expect(res.status).toBe(200)
       expect(res.body.data.signup).toBe(true)
     })
+
+    it('should return EmailInUseError on invalid data', async () => {
+      const password = await hash('any_password', 8)
+      await accountCollection.insertOne({
+        email: 'any_email@mail.com',
+        username: 'any_username',
+        password
+      })
+      const res = await request(app).post('/graphql').send({ query })
+      expect(res.status).toBe(403)
+      expect(res.body.data).toBeFalsy()
+      expect(res.body.errors[0].message).toBe('Email already in use')
+    })
   })
 })
