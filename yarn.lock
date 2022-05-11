@@ -360,7 +360,7 @@
     fast-json-stable-stringify "^2.1.0"
     tslib "~2.4.0"
 
-"@graphql-tools/schema@8.3.11", "@graphql-tools/schema@^8.0.0":
+"@graphql-tools/schema@8.3.11", "@graphql-tools/schema@^8.0.0", "@graphql-tools/schema@^8.3.11":
   version "8.3.11"
   resolved "https://registry.yarnpkg.com/@graphql-tools/schema/-/schema-8.3.11.tgz#c0606b301852820a46042ebb888fd09cc402518a"
   integrity sha512-esMEnbyXbp8B5VEI4o395+x0G7Qmz3JSX5onFBF8HeLYcqWJasY5vBuWkO18VxrZpEnvnryodP6Y00bVag9O3Q==
@@ -370,7 +370,7 @@
     tslib "~2.4.0"
     value-or-promise "1.0.11"
 
-"@graphql-tools/utils@8.6.10":
+"@graphql-tools/utils@8.6.10", "@graphql-tools/utils@^8.6.10":
   version "8.6.10"
   resolved "https://registry.yarnpkg.com/@graphql-tools/utils/-/utils-8.6.10.tgz#38e42a97a74ffcf5a21e816401e2ca1647194f6a"
   integrity sha512-bJH9qwuyM3BP0PTU6/lvBDkk6jdEIOn+dbyk4pHMVNnvbJ1gZQwo62To8SHxxaUTus8OMhhVPSh9ApWXREURcg==
