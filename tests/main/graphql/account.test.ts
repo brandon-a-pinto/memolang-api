@@ -50,4 +50,16 @@ describe('Account GraphQL', () => {
       expect(res.body.errors[0].message).toBe('Unauthorized')
     })
   })
+
+  describe('SignUp Mutation', () => {
+    const query = `mutation {
+      signup (email: "any_email@mail.com", username: "any_username", password: "any_password", passwordConfirmation: "any_password")
+    }`
+
+    it('should return true on valid data', async () => {
+      const res = await request(app).post('/graphql').send({ query })
+      expect(res.status).toBe(200)
+      expect(res.body.data.signup).toBe(true)
+    })
+  })
 })
