@@ -88,5 +88,18 @@ describe('Deck GraphQL', () => {
       expect(res.body.data.loadAll[0].language).toBe('any_language')
       expect(res.body.data.loadAll[0].flashcards).toBeFalsy()
     })
+
+    it('should return AccessDeniedError if no token is provided', async () => {
+      const { id } = await mockAccount()
+      await deckCollection.insertOne({
+        title: 'any_title',
+        language: 'any_language',
+        ownerId: id
+      })
+      const res = await request(app).post('/graphql').send({ query })
+      expect(res.status).toBe(403)
+      expect(res.body.data).toBeFalsy()
+      expect(res.body.errors[0].message).toBe('AccessDeniedError')
+    })
   })
 })
