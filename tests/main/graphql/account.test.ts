@@ -53,13 +53,15 @@ describe('Account GraphQL', () => {
 
   describe('SignUp Mutation', () => {
     const query = `mutation {
-      signup (email: "any_email@mail.com", username: "any_username", password: "any_password", passwordConfirmation: "any_password")
+      signup (email: "any_email@mail.com", username: "any_username", password: "any_password", passwordConfirmation: "any_password") {
+        accessToken
+      }
     }`
 
-    it('should return true on valid data', async () => {
+    it('should return an account on valid data', async () => {
       const res = await request(app).post('/graphql').send({ query })
       expect(res.status).toBe(200)
-      expect(res.body.data.signup).toBe(true)
+      expect(res.body.data.signup.accessToken).toBeTruthy()
     })
 
     it('should return EmailInUseError on invalid data', async () => {

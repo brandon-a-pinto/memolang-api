@@ -1,7 +1,11 @@
 import faker from '@faker-js/faker'
 
 import { SignUpController } from '@/presentation/controllers'
-import { ValidationSpy, AddAccountSpy } from '@/tests/presentation/mocks'
+import {
+  ValidationSpy,
+  AddAccountSpy,
+  AuthenticationSpy
+} from '@/tests/presentation/mocks'
 import { ServerError, EmailInUseError } from '@/presentation/errors'
 import { badRequest, ok, serverError, forbidden } from '@/presentation/helpers'
 import { throwError } from '@/tests/domain/mocks'
@@ -19,13 +23,19 @@ type SutTypes = {
   sut: SignUpController
   validationSpy: ValidationSpy
   addAccountSpy: AddAccountSpy
+  authenticationSpy: AuthenticationSpy
 }
 
 const makeSut = (): SutTypes => {
   const validationSpy = new ValidationSpy()
   const addAccountSpy = new AddAccountSpy()
-  const sut = new SignUpController(validationSpy, addAccountSpy)
-  return { sut, validationSpy, addAccountSpy }
+  const authenticationSpy = new AuthenticationSpy()
+  const sut = new SignUpController(
+    validationSpy,
+    addAccountSpy,
+    authenticationSpy
+  )
+  return { sut, validationSpy, addAccountSpy, authenticationSpy }
 }
 
 describe('SignUp Controller', () => {
@@ -44,9 +54,9 @@ describe('SignUp Controller', () => {
   })
 
   it('should return 200 on success', async () => {
-    const { sut, addAccountSpy } = makeSut()
+    const { sut, authenticationSpy } = makeSut()
     const res = await sut.perform(mockRequest())
-    expect(res).toEqual(ok(addAccountSpy.result))
+    expect(res).toEqual(ok(authenticationSpy.result))
   })
 
   it('should call AddAccount with correct values', async () => {

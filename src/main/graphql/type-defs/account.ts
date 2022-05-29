@@ -11,7 +11,7 @@ export default gql`
       username: String!
       password: String!
       passwordConfirmation: String!
-    ): Boolean!
+    ): Account!
   }
 
   type Account {
