@@ -15,7 +15,14 @@ export const signUpPath = {
     },
     responses: {
       200: {
-        description: 'Success'
+        description: 'Success',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/schemas/account'
+            }
+          }
+        }
       },
       400: {
         $ref: '#/components/badRequest'
