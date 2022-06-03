@@ -10,10 +10,10 @@ import { auth } from '@/main/middlewares'
 
 export default (router: Router): void => {
   router.post('/decks', auth, adaptRoute(makeAddDeckController()))
+  router.get('/decks', auth, adaptRoute(makeLoadDecksController()))
   router.put(
     '/decks/:deckId/add-card',
     auth,
     adaptRoute(makeAddFlashcardController())
   )
-  router.get('/decks/:ownerId', auth, adaptRoute(makeLoadDecksController()))
 }

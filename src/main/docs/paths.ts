@@ -1,6 +1,8 @@
-import { loginPath, signUpPath } from './paths/'
+import { loginPath, signUpPath, deckPath, addFlashcardPath } from './paths/'
 
 export default {
   '/accounts/signup': signUpPath,
-  '/accounts/login': loginPath
+  '/accounts/login': loginPath,
+  '/decks': deckPath,
+  '/decks/{deckId}/add-card': addFlashcardPath
 }
