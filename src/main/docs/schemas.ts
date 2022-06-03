@@ -4,7 +4,10 @@ import {
   errorSchema,
   signUpParamsSchema,
   addDeckParamsSchema,
-  addFlashcardParamsSchema
+  addFlashcardParamsSchema,
+  deckSchema,
+  flashcardSchema,
+  decksSchema
 } from './schemas/'
 
 export default {
@@ -13,5 +16,8 @@ export default {
   addDeckParams: addDeckParamsSchema,
   addFlashcardParams: addFlashcardParamsSchema,
   account: accountSchema,
+  deck: deckSchema,
+  decks: decksSchema,
+  flashcard: flashcardSchema,
   error: errorSchema
 }
