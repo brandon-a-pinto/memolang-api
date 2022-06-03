@@ -123,7 +123,7 @@ describe('Deck Routes', () => {
     })
   })
 
-  describe('GET /decks/:ownerId', () => {
+  describe('GET /decks', () => {
     it('should return 200 on load decks', async () => {
       const { accessToken, id } = await mockAccount()
       await deckCollection.insertOne({
@@ -132,22 +132,21 @@ describe('Deck Routes', () => {
         ownerId: id
       })
       await request(app)
-        .get(`/api/decks/${id.toHexString()}`)
+        .get(`/api/decks`)
         .set('x-access-token', accessToken)
         .expect(200)
     })
 
     it('should return 204 on load decks', async () => {
-      const { accessToken, id } = await mockAccount()
+      const { accessToken } = await mockAccount()
       await request(app)
-        .get(`/api/decks/${id.toHexString()}`)
+        .get(`/api/decks`)
         .set('x-access-token', accessToken)
         .expect(204)
     })
 
     it('should return 403 on load decks without accessToken', async () => {
-      const { id } = await mockAccount()
-      await request(app).get(`/api/decks/${id.toHexString()}`).expect(403)
+      await request(app).get(`/api/decks`).expect(403)
     })
   })
 })
